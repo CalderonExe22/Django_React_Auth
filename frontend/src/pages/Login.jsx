@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { loginUserAPI } from "../api/accounts"
+import api from "../api/api"
+import { useNavigate } from "react-router-dom"
 
 export default function Login() {
     
@@ -7,6 +8,8 @@ export default function Login() {
         email : '',
         password : ''
     })
+
+    const navigate = useNavigate()
 
     const [isLoading, setIsLoading] = useState(false)
     const [successMesage, setSuccessMesage] = useState(null)
@@ -27,11 +30,12 @@ export default function Login() {
         }
         setIsLoading(true);
         try{
-            const response = await loginUserAPI(formData)
+            const response = await api.post('login/',formData)
             console.log('success!',response.data)
             setSuccessMesage('Te has logeado correctamente!!')
             localStorage.setItem('accessToken', response.data.tokens.access)
             localStorage.setItem('refreshToken', response.data.tokens.refresh)
+            navigate('/');
         }catch(error){
             console.log('error en el logeado', error.response?.data)
             if(error.response && error.response.data){
@@ -67,7 +71,7 @@ export default function Login() {
                         />
                     </div>
                     <div className="flex flex-col items-center">
-                        <button disabled={isLoading} onClick={handleSubmit} type="submit">Register</button>
+                        <button disabled={isLoading} onClick={handleSubmit} type="submit">Log in</button>
                     </div>
                 </form>
             </div>

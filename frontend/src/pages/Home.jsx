@@ -1,23 +1,18 @@
-// eslint-disable-next-line no-unused-vars
-import { React, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useState } from 'react'
-import { UserInfoAPI, UserLogoutAPI } from '../api/accounts'
+import api from '../api/api'
+
 export default function Home() {
 
   const [username, setUserName] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-
+  
   useEffect(()=>{
     const checkLoggedInUser = async () =>{
       try{
         const token = localStorage.getItem('accessToken')
         if(token) {
-          const config = {
-            headers : {
-              'Authorization' : `Bearer ${token}`
-            }
-          }
-          const response = await UserInfoAPI(config)
+          const response = await api.get('user/')
           setIsLoggedIn(true)
           setUserName(response.data.username)
         }else{
@@ -43,7 +38,7 @@ export default function Home() {
             'Authorization' : `Bearer ${accessToken}`
           }
         }
-        await UserLogoutAPI({'refresh':refreshToken},config)
+        await api.post('logout/', { refresh: refreshToken }, config);
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
         setIsLoggedIn(false)

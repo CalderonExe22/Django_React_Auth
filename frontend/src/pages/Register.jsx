@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { registerUserAPI } from "../api/accounts"
+import api from "../api/api"
 
 
 export default function Register() {
@@ -29,7 +29,7 @@ export default function Register() {
         }
         setIsLoading(true);
         try{
-            const response = await registerUserAPI(formData)
+            const response = await api.post('register/',formData)
             console.log('success!',response)
             setSuccessMesage('cuenta creada correctamente!!')
         }catch(error){

@@ -28,7 +28,7 @@ class Rol(models.Model):
     description = models.TextField(blank=True)
     
     def __str__(self):
-        return self().name
+        return self.name
     
 class RolUser(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
